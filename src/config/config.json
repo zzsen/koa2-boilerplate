@@ -1,0 +1,12 @@
+{
+  "mysql": [
+    {
+      "environment": "development",
+      "host": "localhost",
+      "dialect": "mysql",
+      "database": "test",
+      "username": "123",
+      "password": "123"
+    }
+  ]
+}
