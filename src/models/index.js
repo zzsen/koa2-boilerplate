@@ -39,12 +39,9 @@ fs
     var fileContent = require(path.join(__dirname, file))
     var fileName = file.slice(0, file.lastIndexOf('.js'))
     fileName = fileName.substring(0, 1).toUpperCase() + fileName.substring(1)
-    debug('koa2:modelConfig')(fileContent)
-
-    debug('koa2:modelConfig')(fileContent[fileName])
 
     // 添加和文件名一样的sequelize对象
-    db[fileName] = sequelize.import('project', fileContent[fileName])
+    db[fileName] = sequelize.import(fileName, fileContent[fileName])
     // 遍历文件内的属性
     for (var key in fileContent) {
       // 添加和文件名不一样的class对象
