@@ -1,29 +1,24 @@
 import { User, UserClass } from '../models'
+import debug from 'debug'
 
 let GetUser = async function (id) {
-  User.findOne({
+  var user = null
+  await User.findOne({
     where: { id }
   }).then(u => {
-    if (u) {
-      var user = new UserClass(u)
-      return user
-    } else { return null }
+    user = new UserClass(u)
   })
+  return user
 }
 
-let Verify = async function (username) {
-  let user = new UserClass()
+let Verify = async function (account) {
+  let user = null
   await User.findOne({
-    where: { username }
+    where: { account }
   }).then(u => {
     user = u
   })
   return user
-  // User.findOne({
-  //   where: { account }
-  // }).then(user => {
-  //   return user
-  // })
 }
 
 module.exports = {

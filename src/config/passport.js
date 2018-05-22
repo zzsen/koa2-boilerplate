@@ -9,9 +9,11 @@ passport.serializeUser(function (user, done) {
 })
 
 passport.deserializeUser(function (id, done) {
-  GetUser(id).then(u => {
-    if (u) { done(null, u) } else { done('无效的用户信息', u) }
-  })
+  GetUser(id)
+    .then(u => {
+      if (u) { done(null, u) } else { done(null, false, { message: 'Incorrect username' }) }
+    })
+    .catch(err => { done(err, null) })
 })
 
 var LocalStrategy = require('passport-local').Strategy
@@ -22,7 +24,7 @@ passport.use(new LocalStrategy(function (username, password, done) {
       u = new UserClass(u)
       done(null, u)
     } else {
-      done(null, false)
+      done(null, false, { message: 'Incorrect password.' })
     }
   })
     .catch(err => {

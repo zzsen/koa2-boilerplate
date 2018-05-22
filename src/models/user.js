@@ -32,7 +32,7 @@ let UserClass = class User {
     if (data) {
       this.id = data.id
       this.account = data.account
-      this.name = data.name
+      this.username = data.username
     }
   }
 }
