@@ -33,7 +33,16 @@ export default function middleware (app) {
   app.use(mount('/', convert(Serve(path.join(__dirname, '../public/')))))
 
   app.keys = ['superalsrk-session-key']
-  app.use(convert(session()))
+  app.use(convert(session({
+    key: 'koa:sess', /** (string) cookie key (default is koa:sess) */
+    cookie: {
+      path: '/',
+      httpOnly: false,
+      maxAge: 10 * 1000,
+      rewrite: true,
+      signed: true
+    }
+  })))
 
   app.use(passport.initialize())
   app.use(passport.session())
