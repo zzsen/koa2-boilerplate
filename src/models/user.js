@@ -5,21 +5,25 @@ let User = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     id: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
     },
     account: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
+      allowNull: false
     },
     username: {
       type: DataTypes.STRING
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     tableName: 'user',
-    timestamps: true,
+    timestamps: true, // 添加时间戳属性 (updatedAt, createdAt)
     paranoid: true// 不删除数据库条目，但将新添加的属性deletedAt设置为当前日期
   }
   )

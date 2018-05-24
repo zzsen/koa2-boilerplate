@@ -3,9 +3,9 @@
 
 import { mysql } from '../config/config'
 import debug from 'debug'
-var fs = require('fs')
-var path = require('path')
-var Sequelize = require('sequelize')
+import fs from 'fs'
+import path from 'path'
+import Sequelize from 'sequelize'
 var basename = path.basename(__filename)
 var db = {}
 debug('koa2:modelConfig')(mysql)
@@ -53,6 +53,20 @@ fs
     debug('koa2:modelDB')(db)
   })
 
+db['User'].hasMany(db['Book'], {
+  foreignKey: 'publishor_id',
+  constraints: false,
+  otherKey: 'id'
+})
+/*
+user.getBooks().then(books => {
+  debug('koa2:book')(books)
+}).catch(err => {
+  debug('koa2:bookerr')(err)
+})
+*/
+// 获取原生sql的方法
+// debug('koa2:a')(User.sequelize.dialect.QueryGenerator.selectQuery(User.getTableName(), { where: { id: 1 } }))
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 

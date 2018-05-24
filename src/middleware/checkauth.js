@@ -12,7 +12,8 @@ export default function checkauth () {
       await next()
     } else {
       ctx.body = {
-        'status': 401
+        'status': 401,
+        'message': 'please login'
       }
     }
   }
