@@ -9,6 +9,10 @@ import mount from 'koa-mount'
 import bodyParser from 'koa-bodyparser'
 import session from 'koa-generic-session'
 import views from 'koa-views'
+
+import koaBody from 'koa-body'
+import fs from 'fs'
+import os from 'os'
 import path from 'path'
 
 import _ from './passport'
@@ -27,10 +31,34 @@ export default function middleware (app) {
     replaceConsole: true
   })
 
+  app.use(koaBody({ multipart: true }))
   app.use(cors({ credentials: true }))
   app.use(convert(Logger()))
   app.use(bodyParser())
   app.use(mount('/', convert(Serve(path.join(__dirname, '../public/')))))
+
+  app.use(async function (ctx, next) {
+    // ignore non-POSTs
+    if (ctx.method !== 'POST') {
+      await next()
+      return
+    }
+    if (!ctx.request.body.files) {
+      await next()
+      return
+    }
+    const file = ctx.request.body.files.file
+    if (!file) {
+      await next()
+    } else {
+      const reader = fs.createReadStream(file.path)
+      const stream = fs.createWriteStream(path.join(os.tmpdir(), Math.random().toString()))
+      reader.pipe(stream)
+      console.log('uploading %s -> %s', file.name, stream.path)
+
+      await next()
+    }
+  })
 
   app.keys = ['superalsrk-session-key']
   app.use(convert(session({
